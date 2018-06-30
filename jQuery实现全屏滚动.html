@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>全屏滚动</title>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+				text-decoration: none;
+				list-style: none;
+			}
+			
+			html,
+			body {
+				height: 100%;
+			}
+			
+			#floor {
+				width: 100%;
+				height: 100%;
+				margin: 0 auto;
+				text-align: center;
+				font-size: 42px;
+			}
+			
+			#floor div {
+				width: 100%;
+				height: 100%;
+			}
+			
+			#floor div:nth-child(1) {
+				background: saddlebrown;
+			}
+			
+			#floor div:nth-child(2) {
+				background: salmon;
+			}
+			
+			#floor div:nth-child(3) {
+				background: sandybrown;
+			}
+			
+			#floor div:nth-child(4) {
+				background: skyblue;
+			}
+			
+			#floor div:nth-child(5) {
+				background: silver;
+			}
+			
+			#list {
+				position: fixed;
+				top: 30px;
+				left: 10px;
+			}
+			
+			#list li {
+				width: 100px;
+				height: 30px;
+				text-align: center;
+				margin-top: 10px;
+				line-height: 30px;
+				border-radius: 25px;
+				cursor: pointer;
+				border: 1px solid steelblue;
+			}
+			
+			.active {
+				background: aliceblue;
+				opacity: 0.8;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="floor">
+			<div>富强</div>
+			<div>民主</div>
+			<div>公正</div>
+			<div>法制</div>
+			<div>爱国</div>
+		</div>
+		<ul id="list">
+			<li class="active">富强</li>
+			<li>民主</li>
+			<li>公正</li>
+			<li>法制</li>
+			<li>爱国</li>
+			<li class="last">返回顶部</li>
+		</ul>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script type="text/javascript">
+			var $floor = $("#floor div");
+			var $oList = $("#list li");
+			//实现点击左侧按钮，翻页
+			$oList.not(".last").click(function() {
+				var $index = $(this).index();
+				var $top = $floor.eq($index).offset().top; //offset()拿到距离顶端的距离
+				$("html").stop().animate({ //添加翻页过渡动画
+					scrollTop: $top
+				}, 500)
+			})
+
+			$(window).scroll(function() {
+				var $top = $("html").scrollTop(); //找到滚动条位置
+				console.log($("html").scrollTop(),$top)
+				if($top > 150) {
+					$("#list").fadeIn(500);
+				} else {
+					$("#list").fadeOut(500);
+				}
+				$floor.each(function(ind) {
+					var $h = $(this).offset().top - $top;
+					if($h < $(this).height() / 2) {
+						$oList.eq(ind).addClass("active").siblings().removeClass()
+					}
+				})
+			})
+
+			$(".last").click(function() {
+				$("html").stop().animate({
+					scrollTop: 0
+				}, 500)
+			})
+		</script>
+	</body>
+
+</html>
